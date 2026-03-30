@@ -1,0 +1,67 @@
+{{define "extra-styles"}}
+#content-pre {
+  overflow-x: auto;
+  max-width: 100%;
+}
+#content-pre.wrap {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+#wrap-toggle {
+  padding: 0.5rem 1rem;
+  margin-left: 1rem;
+}
+{{end}}
+
+{{define "blob"}}
+<!doctype html>
+<html lang="ja">
+{{template "common-head" .}}
+<body>
+  <main class="container">
+    <nav aria-label="breadcrumb">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/r/{{.RepoName}}">{{.RepoName}}</a></li>
+        <li><a href="/r/{{.RepoName}}/t/{{.Ref}}">{{.Ref}}</a></li>
+        {{range .PathSegments}}
+        <li><a href="/r/{{$.RepoName}}/t/{{$.Ref}}/{{.Path}}">{{.Name}}</a></li>
+        {{end}}
+        {{if .CurrentName}}
+        <li>{{.CurrentName}}</li>
+        {{end}}
+      </ul>
+    </nav>
+
+    <h1>{{.RepoName}} / {{.Ref}}</h1>
+    {{if .Path}}
+    <h2>{{.Path}}</h2>
+    {{end}}
+
+    <p>
+      <strong>Size:</strong> {{formatFileSize .Size}}
+      {{if not .IsBinary}}
+      <button id="wrap-toggle">Toggle Wrap</button>
+      {{end}}
+    </p>
+
+    {{if .IsBinary}}
+    <p><em>Binary file</em></p>
+    {{else}}
+    <pre id="content-pre"><code>{{.Content}}</code></pre>
+
+    <script>
+      const pre = document.getElementById('content-pre');
+      const btn = document.getElementById('wrap-toggle');
+
+      btn.addEventListener('click', () => {
+        pre.classList.toggle('wrap');
+      });
+    </script>
+    {{end}}
+  </main>
+  {{template "search-modal"}}
+  {{template "theme-toggle"}}
+</body>
+</html>
+{{end}}

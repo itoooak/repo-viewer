@@ -1,0 +1,65 @@
+{{define "tree"}}
+<!doctype html>
+<html lang="ja">
+{{template "common-head" .}}
+<body>
+  <main class="container">
+    <nav aria-label="breadcrumb">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/r/{{.RepoName}}">{{.RepoName}}</a></li>
+        <li><a href="/r/{{.RepoName}}/t/{{.Ref}}">{{.Ref}}</a></li>
+        {{range .PathSegments}}
+        <li><a href="/r/{{$.RepoName}}/t/{{$.Ref}}/{{.Path}}">{{.Name}}</a></li>
+        {{end}}
+        {{if .CurrentName}}
+        <li>{{.CurrentName}}</li>
+        {{end}}
+      </ul>
+    </nav>
+
+    <h1>{{.RepoName}} / {{.Ref}}</h1>
+    {{if .Path}}
+    <h2>{{.Path}}</h2>
+    {{end}}
+
+    {{if .Entries}}
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Size</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{if .Path}}
+          <tr>
+            <td><a href="/r/{{$.RepoName}}/t/{{$.Ref}}{{$.ParentPath}}">📁 ..</a></td>
+            <td>-</td>
+          </tr>
+          {{end}}
+          {{range .Entries}}
+          <tr>
+            <td>
+              {{if .IsDir}}
+              <a href="/r/{{$.RepoName}}/t/{{$.Ref}}/{{$.Path}}{{if $.Path}}/{{end}}{{.Name}}">📁 {{.Name}}</a>
+              {{else}}
+              <a href="/r/{{$.RepoName}}/b/{{$.Ref}}/{{$.Path}}{{if $.Path}}/{{end}}{{.Name}}">📄 {{.Name}}</a>
+              {{end}}
+            </td>
+            <td>{{if not .IsDir}}{{formatFileSize .Size}}{{else}}-{{end}}</td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+    </div>
+    {{else}}
+    <p>This directory is empty.</p>
+    {{end}}
+  </main>
+  {{template "search-modal"}}
+  {{template "theme-toggle"}}
+</body>
+</html>
+{{end}}

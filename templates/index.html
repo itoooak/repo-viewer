@@ -1,0 +1,35 @@
+{{define "index"}}
+<!doctype html>
+<html lang="ja">
+{{template "common-head" .}}
+<body>
+  <main class="container">
+    <h1>Repositories</h1>
+
+    {{if .Repos}}
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .Repos}}
+          <tr>
+            <td><strong>{{.Name}}</strong></td>
+            <td><a href="/r/{{.Name}}">View</a></td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+    </div>
+    {{else}}
+    <p>No repositories found.</p>
+    {{end}}
+  </main>
+  {{template "theme-toggle"}}
+</body>
+</html>
+{{end}}

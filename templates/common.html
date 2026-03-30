@@ -1,0 +1,61 @@
+{{define "common-head"}}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>{{.Title}}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <style>
+    .table-wrapper {
+      overflow-x: auto;
+    }
+    pre {
+      overflow-x: auto;
+      max-width: 100%;
+    }
+    h1, h2 {
+      word-break: break-all;
+    }
+    #theme-toggle {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      padding: 0.5rem 1rem;
+      z-index: 1000;
+    }
+    {{block "extra-styles" .}}{{end}}
+  </style>
+</head>
+{{end}}
+
+{{define "theme-toggle"}}
+<button id="theme-toggle" aria-label="Toggle theme"></button>
+<script>
+  (function() {
+    const html = document.documentElement;
+    const btn = document.getElementById('theme-toggle');
+
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const systemTheme = systemPrefersDark ? 'dark' : 'light';
+
+    const savedTheme = localStorage.getItem('theme');
+    const theme = savedTheme || systemTheme;
+    html.setAttribute('data-theme', theme);
+
+    function updateButtonIcon() {
+      const currentTheme = html.getAttribute('data-theme');
+      btn.textContent = currentTheme === 'light' ? '☀️' : '🌙';
+    }
+
+    updateButtonIcon();
+
+    btn.addEventListener('click', () => {
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateButtonIcon();
+    });
+  })();
+</script>
+{{end}}

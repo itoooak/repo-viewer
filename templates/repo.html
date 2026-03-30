@@ -1,0 +1,83 @@
+{{define "repo"}}
+<!doctype html>
+<html lang="ja">
+{{template "common-head" .}}
+<body>
+  <main class="container">
+    <nav aria-label="breadcrumb">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li>{{.RepoName}}</li>
+      </ul>
+    </nav>
+
+    <h1>{{.RepoName}}</h1>
+
+    <section>
+      <h2>Overview</h2>
+      <p><strong>HEAD:</strong> {{.Head}}</p>
+    </section>
+
+    <section>
+      <h2>Branches</h2>
+      {{if .Branches}}
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .Branches}}
+            <tr>
+              <td><code>{{.Name}}</code></td>
+              <td><a href="/r/{{$.RepoName}}/t/{{.Name}}">View Tree</a></td>
+            </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+      {{else}}
+      <p>No branches found.</p>
+      {{end}}
+    </section>
+
+    <section>
+      <h2>Tags</h2>
+      {{if .Tags}}
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .Tags}}
+            <tr>
+              <td><code>{{.Name}}</code></td>
+              <td><a href="/r/{{$.RepoName}}/t/{{.Name}}">View Tree</a></td>
+            </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+      {{else}}
+      <p>No tags found.</p>
+      {{end}}
+    </section>
+
+    {{if .ReadmeContent}}
+    <section>
+      <h2>README</h2>
+      <pre><code>{{.ReadmeContent}}</code></pre>
+    </section>
+    {{end}}
+  </main>
+  {{template "theme-toggle"}}
+</body>
+</html>
+{{end}}
