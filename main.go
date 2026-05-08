@@ -4,13 +4,21 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"os"
 
 	"repo-viewer/internal/handler"
 )
 
+func getEnv(key, defaultVal string) string {
+	if val := os.Getenv(key); val != "" {
+		return val
+	}
+	return defaultVal
+}
+
 func main() {
-	repoDir := flag.String("dir", "./repos", "repository directory path")
-	port := flag.String("port", "8080", "server port")
+	repoDir := flag.String("dir", getEnv("REPO_DIR", "./repos"), "repository directory path")
+	port := flag.String("port", getEnv("SERVER_PORT", "8080"), "server port")
 	flag.Parse()
 
 	h, err := handler.New(*repoDir)
